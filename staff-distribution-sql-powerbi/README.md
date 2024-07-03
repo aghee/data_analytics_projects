@@ -17,21 +17,25 @@
 This project aims to understand the distribution of staff across different departments,locations and roles within an organization. This analysis helps in identifying staffing imbalances, organization turnover rate, optimizing resource allocation, and planning for future hiring needs.
 
 ### Data Visualization Report
+---
 
 ![staff_rpt1](https://github.com/aghee/data_analytics_projects/assets/19945989/d51a419b-a047-47c7-beb5-afb06c2c8e6b)
 
 ![staff_rpt2](https://github.com/aghee/data_analytics_projects/assets/19945989/f2a395d8-dc00-4943-9cb5-9b652a32fedd)
 
 ### Data Sources
+---
 Human Resources Data: The primary data set used for the analysis is "Staffdata.csv" that contains sufficient information about each employee.
 
 ### Tools used
+---
 - Data cleaning and analysis - MySQL Workbench
   - [Download here](https://www.mysql.com/products/workbench/)
 - Data Visualization/ Creating reports - PowerBI
   - [Download here](powerbi.microsoft.com)
 
 ### Data Cleaning or Preparation
+---
 This involved tasks to transform the data into a format appropriate for the tools that will be used to analyze and present the data.
 - Data loading and inspection
 - Removing duplicate values
@@ -42,6 +46,7 @@ This involved tasks to transform the data into a format appropriate for the tool
 - Feature engineering for example extracting day,month,year from a date
 
 ### Exploratory Data Analysis
+---
 This involved exploring the staff/employee data to answer key questions such as:
 - What is the race/ethnicity breakdown of employees in the company?
 - What is the age distribution of employees in the company?
@@ -160,6 +165,7 @@ WHERE
 GROUP BY gender;
 ```
 ### Findings
+---
 - The age groups created are GEN Z(18-29), Thirty plus_Millennials(30-39), Forty plus_GEN X(40-49) and Fifty plus_Baby Boomers(Over 50). The highest number of staff in the company are millennials aged between 30 and 40 years, and the least are the baby boomers aged over 50 years.
 - The company has more male than female staff.
 - There are significantly more staff working at headquarters compared to those working remotely.
@@ -169,6 +175,7 @@ GROUP BY gender;
 - The average length of employment for staff at the company is 8 years.
 
 ### Recommendations
+---
 - The company may provide flexible retirement planning and phased retirement options for Baby Boomers to leverage their experience and knowledge. This may also foster knowledge management by ensuring more experienced staff pass down knowledge to junior staff before their retirement.
 - The company may introduce policies that support work-life balance, such as remote work options, and parental leave policies, to make the workplace more attractive to female employees.
 - The company may consider implementing a hybrid work model that allows employees to split their time between working from headquarters and remotely, to cater for diverse preferences and improve work-life balance.
@@ -177,6 +184,7 @@ GROUP BY gender;
 - The company may implement scalable HR practices and systems to manage the increasing workforce efficiently, such as employee self-service portals.
 
 ### Limitations
+---
 - Termdates used are less than or equal to current date.(As at 03.07.2024 ,1395 records are excluded)
 ```sql
 # excluded termdates
@@ -192,4 +200,5 @@ FROM human_rs
 WHERE age<18;
 ```
 ### References
+---
 - Stackoverflow [Visit](https://stackoverflow.com/questions/tagged/window-functions#:~:text=A%20window%20function%20is%20a,partition%20of%20the%20result%20set.)
