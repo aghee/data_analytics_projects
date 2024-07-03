@@ -16,6 +16,9 @@
 ## Project Overview
 This project aims to understand the distribution of staff across different departments,locations and roles within an organization. This analysis helps in identifying staffing imbalances, organization turnover rate, optimizing resource allocation, and planning for future hiring needs.
 
+### Data Visualization Report
+
+
 ### Data Sources
 Human Resources Data: The primary data set used for the analysis is "Staffdata.csv" that contains sufficient information about each employee.
 
