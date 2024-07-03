@@ -5,7 +5,7 @@ This repository contains a collection of data analysis projects developed using 
 - **Python**
 - **MS PowerBI**
 
-### Staff distribution analysis
+### [Staff distribution analysis](https://github.com/aghee/data_analytics_projects/tree/main/staff-distribution-sql-powerbi)
 This projects aims to explore the dataset to highlight
 - Demographic factors such as age and gender within the dataset mainly in terms of their distribution
 - Trends and patterns such as turnover rates, staff growth and retention rates
