@@ -18,6 +18,9 @@ This project aims to understand the distribution of staff across different depar
 
 ### Data Visualization Report
 
+![staff_rpt1](https://github.com/aghee/data_analytics_projects/assets/19945989/d51a419b-a047-47c7-beb5-afb06c2c8e6b)
+
+![staff_rpt2](https://github.com/aghee/data_analytics_projects/assets/19945989/f2a395d8-dc00-4943-9cb5-9b652a32fedd)
 
 ### Data Sources
 Human Resources Data: The primary data set used for the analysis is "Staffdata.csv" that contains sufficient information about each employee.
