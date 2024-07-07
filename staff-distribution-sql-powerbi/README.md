@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Data Visualization Report](#data-visualization-report)
 - [Data Sources](#data-sources)
 - [Tools used](#tools-used)
 - [Data Cleaning/Preparation](#data-cleaning-or-preparation)
