@@ -1,4 +1,4 @@
-# Staff Distribution Analysis
+# Retail Sales Analysis
 
 ## Table of Contents
 
@@ -11,22 +11,21 @@
 - [Data Analysis](#data-analysis)
 - [Findings](#findings)
 - [Recommendations](#recommendations)
-- [Limitations](#limitations)
 - [References](#references)
 
 ## Project Overview
-This project aims to understand the distribution of staff across different departments,locations and roles within an organization. This analysis helps in identifying staffing imbalances, organization turnover rate, optimizing resource allocation, and planning for future hiring needs.
+This project analyzes Walmart sales data to identify top-performing branches and products, understand sales trends, and study customer behavior. It aims to enhance and optimize sales strategies using data from the Kaggle Walmart Sales Forecasting Competition, which includes historical sales data for 45 stores and the impact of holiday markdown events.
 
 ### Data Visualization Report
 ---
+![rpt1](https://github.com/aghee/data_analytics_projects/assets/19945989/5b492634-19a9-4faa-aa31-310850d5047b)
+![rpt3](https://github.com/aghee/data_analytics_projects/assets/19945989/bd3bc028-877c-495c-83ab-6d4104fbffe5)
+![rpt2](https://github.com/aghee/data_analytics_projects/assets/19945989/19e037fc-478e-4f96-8b63-1364c372c2ee)
 
-![staff_rpt1](https://github.com/aghee/data_analytics_projects/assets/19945989/d51a419b-a047-47c7-beb5-afb06c2c8e6b)
-
-![staff_rpt2](https://github.com/aghee/data_analytics_projects/assets/19945989/f2a395d8-dc00-4943-9cb5-9b652a32fedd)
 
 ### Data Sources
 ---
-Human Resources Data: The primary data set used for the analysis is "Staffdata.csv" that contains sufficient information about each employee.
+Sales Data: The primary data set used for the analysis is "walmartsales.csv" that contains sufficient information about the sales from target stores.This dataset contains sales transactions from three different branches of Walmart,located in Mandalay, Yangon and Naypyitaw. The data contains 17 columns and 1000 rows.
 
 ### Tools used
 ---
@@ -40,166 +39,129 @@ Human Resources Data: The primary data set used for the analysis is "Staffdata.c
 This involved tasks to transform the data into a format appropriate for the tools that will be used to analyze and present the data.
 - Data loading and inspection
 - Removing duplicate values
-- Handling missing values(replaced missing values with null in termdate field)
+- Handling missing values
 - Standardizing data formats for example, date to be consistent with YYYY-M-D format
 - Removing unwanted characters from textfields for exmple using TRIM, REPLACE
-- Filtering outliers for example excluding age less than 18 years in the analysis
-- Feature engineering for example extracting day,month,year from a date
+- Feature engineering for example adding new columns month_name,day_name,time_of_day
 
 ### Exploratory Data Analysis
 ---
-This involved exploring the staff/employee data to answer key questions such as:
-- What is the race/ethnicity breakdown of employees in the company?
-- What is the age distribution of employees in the company?
-- What is the gender breakdown of employees in the company?
-- How does the gender distribution vary across departments and job titles?
-- What is the tenure distribution for each department?
-- What is the average length of employment for employees who have been terminated?
-- How has the company's employee count changed over time based on hire and term dates?
-- What is the distribution of employees across locations state?
-- How does the gender distribution vary across departments and job titles?
-- How many employees work at headquarters versus remote locations?
+This involved exploring the sales data to answer key questions such as:  
+**Customer analysis**
+- What is the most common customer type?
+- Which customer type buys the most?
+- What is the gender of most of the customers?
+- How many unique customer types does the data have?
+- How many unique payment methods does the data have?
+- What is the gender distribution per branch?
+- Which time of the day do customers give most ratings?
+- Which time of the day do customers give most ratings per branch?
+- Which day of the week has the best average ratings?
+- Which day of the week has the best average ratings per branch?
+
+**Sales analysis**
+- Number of sales made in each time of the day per weekday
+- Monetary worth/value of sales made in each time of the day per weekday(**NB:weekday means monday to friday**)
+- Monetary worth/value of sales made during each time of day
+- Which of the customer types brings the most revenue?
+- Which city has the largest tax percent/ VAT (Value Added Tax)
+- Customer type that pays the most in VAT
+
+**Product analysis**
+- What is the most selling product line?
+- What is the most common payment method?
+- What is the total revenue by month?
+- How many unique product lines does the data have?
+- What month had the largest COGS?
+- What product line had the largest revenue?
+- What is the city with the largest revenue?
+- What product line had the largest VAT?
+- Which branch sold more products than average product sold?
+- What is the most common product line by gender?
+- What is the average rating of each product line?
 
 ### Data Analysis
 ```sql
-# categorize employees into age-groups and return total number in each group based on gender
-WITH agedistribution AS (
-SELECT 
-    COUNT(age) AS no_of_employees,
-    gender,
-    CASE
-        WHEN age >= 50 THEN 'Fifty plus_Baby Boomers'
-        WHEN age >= 40 AND age <50 THEN 'Forty plus_GEN X'
-        WHEN age >= 30 AND age <40 THEN 'Thirty plus_Milenials'
-        WHEN age BETWEEN 18 AND 29 THEN 'GEN Z'
-        ELSE 'NA'
-    END AS distr_by_age
-FROM human_rs
-WHERE age>=18 and termdate IS NULL
-GROUP BY age,gender
+# monetary worth/value of sales made during each time of day
+WITH highest_sales AS(
+SELECT sum(total) as total_sales,
+time_of_day,
+day_name
+FROM sales
+WHERE weekday(DATE) BETWEEN 0 AND 4
+GROUP BY time_of_day,day_name
+ORDER BY total_sales
+),
+salessummary AS(
+SELECT total_sales,
+time_of_day,
+day_name,
+RANK() OVER(PARTITION BY time_of_day ORDER BY total_sales DESC) AS `rank`
+FROM highest_sales
 )
-SELECT 
-    distr_by_age,
-    gender,
-    SUM(no_of_employees) AS 'Total Employees'
-FROM
-    agedistribution
-GROUP BY distr_by_age , gender
-ORDER BY distr_by_age , gender;
+SELECT time_of_day,total_sales
+FROM salessummary
+WHERE `rank`=1
+ORDER BY total_sales DESC;
 ```
 ```sql
-# How has the company's employee count changed over time based on hire and term dates?
+# monetary worth/value of sales made in each time of the day per weekday
+# note-weekday means monday to friday
 SELECT 
-    `year`,
-    emp_hired,
-    emp_fired,
-    emp_hired - emp_fired AS net_change,
-    ROUND((emp_hired - emp_fired) / emp_hired * 100,
-            2) AS net_percent_change
+    SUM(total) AS total_sales, time_of_day, day_name
 FROM
-    (SELECT 
-        YEAR(hire_date) AS `year`,
-            COUNT(*) AS emp_hired,
-            SUM(CASE
-                WHEN
-                    termdate IS NOT NULL
-                        AND termdate <= CURDATE()
-                THEN
-                    1
-                ELSE 0
-            END) AS emp_fired
-    FROM
-        human_rs
-    WHERE
-        age >= 18
-    GROUP BY `year`) AS employee_status
-ORDER BY `year`;
-```
-```sql
-# What is the tenure distribution for each department?
-SELECT 
-    department,
-    ROUND(AVG(DATEDIFF(termdate, hire_date) / 365),
-            0) AS average_tenure
-FROM
-    human_rs
+    sales
 WHERE
-    termdate <= CURDATE()
-        AND termdate IS NOT NULL
-        AND age >= 18
-GROUP BY department;
+    WEEKDAY(date) BETWEEN 0 AND 4
+GROUP BY time_of_day , day_name
+ORDER BY time_of_day ASC , total_sales DESC;
 ```
 ```sql
-# Which department has the highest turnover rate?
+# productline with largest revenue*
 SELECT 
-    department,
-    total_count,
-    terminated_count,
-    (terminated_count / total_count) AS termination_rate
+    product_line, SUM(total) AS total_revenue
 FROM
-    (SELECT 
-        department,
-            COUNT(*) AS total_count,
-            SUM(CASE
-                WHEN
-                    termdate IS NOT NULL
-                        AND termdate <= CURDATE()
-                THEN
-                    1
-                ELSE 0
-            END) AS terminated_count
-    FROM
-        human_rs
-    WHERE
-        age >= 18
-    GROUP BY department) AS emp_turnover
-ORDER BY termination_rate DESC;
+    sales
+GROUP BY product_line
+ORDER BY total_revenue DESC;
 ```
 ```sql
-# gender breakdown of employees in the company
-SELECT 
-    gender, COUNT(gender) AS count_by_gender
-FROM
-    human_rs
-WHERE
-    age >= 18 AND termdate IS NULL
-GROUP BY gender;
+# Which day of the week has the best average ratings per branch*
+WITH best_rating AS(
+SELECT AVG(rating) AS avg_rating,
+day_name,
+branch,
+RANK() OVER(PARTITION BY branch ORDER BY AVG(rating) DESC) AS `rank`
+FROM sales
+GROUP BY day_name,branch
+ORDER BY branch ASC,avg_rating DESC
+)
+SELECT day_name,avg_rating,branch
+FROM best_rating
+WHERE `rank`=1;
 ```
 ### Findings
 ---
-- The age groups created are GEN Z(18-29), Thirty plus_Millennials(30-39), Forty plus_GEN X(40-49) and Fifty plus_Baby Boomers(Over 50). The highest number of staff in the company are millennials aged between 30 and 40 years, and the least are the baby boomers aged over 50 years.
-- The company has more male than female staff.
-- There are significantly more staff working at headquarters compared to those working remotely.
-- Legal department has the highest turnover rate while Marketing has the lowest. This means that the company may have to invest more resources to hire replacements in the Legal department.
-- In terms of race, the highest number of employees are white and the least are Native Hawaiian or other Pacific Islander.
-- The net change of staff has increased per year as seen in the period analyzed.
-- The average length of employment for staff at the company is 8 years.
+- Total revenue from member customers (164k) is more than that from normal customers (157k)
+- January had the highest revenue (116k) while February had the least revenue (96k) for Q1
+- A big number of sales were made during the evening hours
+- In terms of the number of products sold, fashion accessories were the highest in number but food and beverages brought in the highest revenue. This shows that selling more products in a particular product line does not necessarily translate to that product bringing in the highest revenue.
+- Food and beverages had the highest rating, while home and lifestyle had the lowest.
+- Male clients prefer E-wallet payment method while female clients prefer cash payment.
+- Each of the branches have good ratings with highest branches having a rating of 7.3 followed closely by the next having 7.2
+
 
 ### Recommendations
 ---
-- The company may provide flexible retirement planning and phased retirement options for Baby Boomers to leverage their experience and knowledge. This may also foster knowledge management by ensuring more experienced staff pass down knowledge to junior staff before their retirement.
-- The company may introduce policies that support work-life balance, such as remote work options, and parental leave policies, to make the workplace more attractive to female employees.
-- The company may consider implementing a hybrid work model that allows employees to split their time between working from headquarters and remotely, to cater for diverse preferences and improve work-life balance.
-- The company may conduct a detailed analysis of the causes of high turnover in the Legal department and implement targeted retention strategies such as competitive compensation and career advancement opportunities.It may be useful to conduct exit interviews to understand the reason employees exit in this department.
-- The company may implement targeted recruitment programs to increase the representation of underrepresented racial and ethnic groups.
-- The company may implement scalable HR practices and systems to manage the increasing workforce efficiently, such as employee self-service portals.
+- The company may re-organize placement of its products at the store such that the products bringing the least revenue are located in close proximity to the fast-moving products to increase their visibility to the customers.
+- Given that member customers generate higher revenue, the company may consider enhancing membership benefits and promoting memberships to attract normal customers to convert.
+- The company may analyze why January is the highest revenue month and replicate successful strategies in other months.
+- The company introduce evening-specific promotions to capitalize on the high sales volume during these hours.
+- The company may adjust staff schedules to ensure adequate coverage during peak evening hours to enhance customer service and sales efficiency.
+- The company should ensure stock prioritizes high-revenue items like food and beverages.
+- The company should investigate and address issues in the home and lifestyle category to improve product ratings, for example through better customer service.
+- Given that all the branches have good ratings, the company should regularly gather and act on customer feedback to maintain and improve these ratings, ensuring consistent high-quality service across all locations.
 
-### Limitations
----
-- Termdates used are less than or equal to current date.(As at 03.07.2024 ,1395 records are excluded)
-```sql
-# excluded termdates
-SELECT count(*)
-FROM human_rs
-WHERE termdate>curdate();
-```
-- Given that the legal age of working in most countries across the world is 18 years and above, the ages used in the analysis excluded ages less than 18 years.(967 records excluded)
-```sql
-# excluded ages
-SELECT count(*)
-FROM human_rs
-WHERE age<18;
-```
 ### References
 ---
 - Stackoverflow [Visit](https://stackoverflow.com/questions/tagged/window-functions#:~:text=A%20window%20function%20is%20a,partition%20of%20the%20result%20set.)
