@@ -10,3 +10,5 @@ This projects aims to explore the dataset to highlight
 - Demographic factors such as age and gender within the dataset mainly in terms of their distribution
 - Trends and patterns such as turnover rates, staff growth and retention rates
 - Diversity in the employee workforce
+
+### [Retail sales analysis]()
