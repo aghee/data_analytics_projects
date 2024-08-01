@@ -13,3 +13,9 @@ This projects aims to explore the dataset to highlight
 
 ### [Retail sales analysis](https://github.com/aghee/data_analytics_projects/tree/main/retail-sales-analysis)
 This project aims to gain insight into one of America's largest retailers ,Walmart, to understand various factors that influence sales at its different branches
+
+### [Customer attrition analysis](https://github.com/aghee/data_analytics_projects/tree/main/retail-sales-analysis)
+The focus of this analysis is to highlight customer attrition/churn rates on each service offered by the telecommunication company and narrow down to the specific reasons for the same. The metrics highlighted by the analysis are
+- Total customers
+- Total attrition and attrition rate
+- New customers
