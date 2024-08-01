@@ -17,8 +17,8 @@
 The focus of this analysis is to highlight customer attrition/churn rates on each service offered by the telecommunication company and narrow down to the specific reasons for the same.
 ### Data Visualization Report
 ---
-![cust_attrition1](https://github.com/user-attachments/assets/431a7080-5e46-4438-bafa-1ba490a3f2fa)
-![cust_attrition2a](https://github.com/user-attachments/assets/27a0f422-8a02-46e7-aca8-88c9c7ef9959)
+![cust1](https://github.com/user-attachments/assets/65d779d9-e10d-4873-95d0-6792bad4855f)
+![cust2](https://github.com/user-attachments/assets/16cd0a75-6593-4bb5-a0a3-00197468e6c4)
 
 ### Data Sources
 ---
