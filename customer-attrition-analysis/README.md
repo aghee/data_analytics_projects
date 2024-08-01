@@ -1,4 +1,4 @@
-# Retail Sales Analysis
+# Customer Attrition Analysis
 
 ## Table of Contents
 
@@ -36,11 +36,6 @@ Customer Data: The primary data set used for the analysis is "Customer_Data.csv"
 ---
  
 **Customer analysis**
-
-**Sales analysis**
-
-
-**Product analysis**
 
 
 ### Data Analysis
